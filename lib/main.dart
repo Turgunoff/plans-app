@@ -46,7 +46,7 @@ class _PlansAppState extends State<PlansApp> {
           children: [
             DateOfPlans(),
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
