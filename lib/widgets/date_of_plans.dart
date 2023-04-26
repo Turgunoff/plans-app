@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class DateOfPlans extends StatelessWidget {
-  const DateOfPlans({
-    super.key,
-  });
+  final Function chooseDate;
+  final Function() previousDate;
+  final DateTime appointedDay;
+
+  const DateOfPlans(this.chooseDate, this.appointedDay, this.previousDate,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +16,16 @@ class DateOfPlans extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: previousDate,
           icon: const Icon(
             size: 36,
             Icons.arrow_left,
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            chooseDate(context);
+          },
           child: RichText(
             text: TextSpan(
               style: TextStyle(
@@ -27,15 +33,15 @@ class DateOfPlans extends StatelessWidget {
                 fontSize: 20,
                 fontFamily: GoogleFonts.montserrat().fontFamily,
               ),
-              children: const [
+              children: [
                 TextSpan(
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
-                  text: 'Monday, ',
+                  text: "${DateFormat.EEEE().format(appointedDay)},  ",
                 ),
                 TextSpan(
-                  text: '26 April',
+                  text: DateFormat("d MMMM").format(appointedDay),
                 ),
               ],
             ),
