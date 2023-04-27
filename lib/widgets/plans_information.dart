@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../models/task_models.dart';
+
 class PlansInformation extends StatelessWidget {
-  const PlansInformation({
-    super.key,
-  });
+  final List<PlanModel> plans;
+  const PlansInformation(this.plans, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(20.0),
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -16,14 +17,14 @@ class PlansInformation extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '03',
-                style: TextStyle(
+                plans.length.toString(),
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              Text(
-                'Rejalar soni',
+              const Text(
+                'Number of plans',
                 style: TextStyle(
                   color: Colors.black54,
                   fontWeight: FontWeight.bold,
@@ -36,14 +37,14 @@ class PlansInformation extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '00',
-                style: TextStyle(
+                plans.where((reja) => reja.done).length.toString(),
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              Text(
-                'Rejalar soni',
+              const Text(
+                'Number of completed plans',
                 style: TextStyle(
                   color: Colors.black54,
                   fontWeight: FontWeight.bold,

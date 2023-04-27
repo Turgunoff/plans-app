@@ -1,36 +1,40 @@
 import 'package:flutter/material.dart';
 
-class Tasks extends StatelessWidget {
-  const Tasks({
-    super.key,
-  });
+import '../models/task_models.dart';
+import 'plans.dart';
 
+class Tasks extends StatelessWidget {
+  final List<PlanModel> plans;
+  final Function markAsDone;
+  final Function deletePlan;
+
+  const Tasks(this.plans, this.markAsDone, this.deletePlan, {super.key});
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
-        itemBuilder: (ctx, index) {
-          return ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-            leading: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.circle_outlined),
+      child: plans.isNotEmpty
+          ? ListView.builder(
+              itemBuilder: (ctx, index) {
+                return Plans(plans[index], markAsDone, deletePlan);
+              },
+              itemCount: plans.length,
+            )
+          : Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(24.0),
+                  child: Text(
+                    "No tasks found.",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Image.asset(
+                  "assets/images/sleep.png",
+                  fit: BoxFit.cover,
+                  width: 150,
+                )
+              ],
             ),
-            title: const Text(
-              "go to home",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            trailing: const Icon(
-              Icons.delete_forever_rounded,
-              size: 24,
-            ),
-          );
-        },
-        itemCount: 5,
-      ),
     );
   }
 }

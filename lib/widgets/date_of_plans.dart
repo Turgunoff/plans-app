@@ -5,9 +5,11 @@ import 'package:intl/intl.dart';
 class DateOfPlans extends StatelessWidget {
   final Function chooseDate;
   final Function() previousDate;
+  final Function() nextDate;
   final DateTime appointedDay;
 
-  const DateOfPlans(this.chooseDate, this.appointedDay, this.previousDate,
+  const DateOfPlans(
+      this.chooseDate, this.appointedDay, this.previousDate, this.nextDate,
       {super.key});
 
   @override
@@ -48,7 +50,7 @@ class DateOfPlans extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: nextDate,
           icon: const Icon(
             size: 36,
             Icons.arrow_right,

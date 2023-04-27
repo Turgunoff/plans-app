@@ -1,9 +1,9 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 
+import 'models/task_models.dart';
 import 'widgets/date_of_plans.dart';
 import 'widgets/plans_information.dart';
+import 'widgets/add_plan.dart';
 import 'widgets/tasks.dart';
 
 void main() {
@@ -31,9 +31,11 @@ class PlansApp extends StatefulWidget {
 }
 
 class _PlansAppState extends State<PlansApp> {
-  DateTime appointedDay = DateTime.now();
+  final PlansModel _plans = PlansModel();
 
-  void chooseDate(BuildContext context) {
+  DateTime _appointedDay = DateTime.now();
+
+  void _chooseDate(BuildContext context) {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -44,21 +46,69 @@ class _PlansAppState extends State<PlansApp> {
         if (selectedDay != null)
           {
             setState(() {
-              appointedDay = selectedDay;
+              _appointedDay = selectedDay;
             }),
           }
       },
     );
   }
 
-  void previousDate() {
+  void _previousDate() {
     setState(() {
-      appointedDay = DateTime(
-        appointedDay.year,
-        appointedDay.month,
-        appointedDay.day - 1,
+      _appointedDay = DateTime(
+        _appointedDay.year,
+        _appointedDay.month,
+        _appointedDay.day - 1,
       );
     });
+  }
+
+  void _nextDate() {
+    setState(() {
+      _appointedDay = DateTime(
+        _appointedDay.year,
+        _appointedDay.month,
+        _appointedDay.day + 1,
+      );
+    });
+  }
+
+  void _markAsDone(String planId) {
+    setState(() {
+      _plans
+          .todoByDay(_appointedDay)
+          .firstWhere((plan) => plan.id == planId)
+          .changePerformance();
+    });
+  }
+
+  void _deletePlan(String planId) {
+    setState(() {
+      _plans.removePlan(planId);
+    });
+  }
+
+  void _addPlan(String planName, DateTime planDay) {
+    setState(() {
+      _plans.addPlans(planName, planDay);
+    });
+    Navigator.of(context).pop();
+  }
+
+  void _addPlanWindow(BuildContext context) {
+    showModalBottomSheet(
+      isDismissible: false,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16.0),
+        ),
+      ),
+      context: context,
+      builder: (ctx) {
+        return NewPlan(_addPlan);
+      },
+    );
   }
 
   @override
@@ -75,14 +125,16 @@ class _PlansAppState extends State<PlansApp> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            DateOfPlans(chooseDate, appointedDay, previousDate),
-            const PlansInformation(),
-            const Tasks(),
+            DateOfPlans(_chooseDate, _appointedDay, _previousDate, _nextDate),
+            PlansInformation(_plans.todoByDay(_appointedDay)),
+            Tasks(_plans.todoByDay(_appointedDay), _markAsDone, _deletePlan),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _addPlanWindow(context);
+        },
         child: const Icon(Icons.add),
       ),
     );
